@@ -1,5 +1,7 @@
 # Think Weather CLI
 
+[![CI](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml)
+
 A Python command-line weather app. Type a city or postal code and get the current conditions, an hourly chart and a 5-day forecast in Celsius or Fahrenheit. It works as a polished dashboard, as plain text or as JSON. Live data comes from the keyless [Open-Meteo](https://open-meteo.com/) API.
 
 ![Live weather for Yerevan rendered by the CLI](docs/screenshots/live-yerevan.svg)
@@ -168,7 +170,7 @@ These results were measured locally on Windows 11 on 2026-10-30:
 | `uv lock` → `uv sync --locked` → `uv run weather --demo` | OK |
 | Live calls (Open-Meteo) | Yerevan, 90210 (US), 00501 (US), `"SW1A 1AA" --country GB`, Springfield (ambiguous), Paris, Երևան, unknown city, `0010 --country AM` all behave as described above |
 
-The workflow in `.github/workflows/ci.yml` runs the same checks on Ubuntu, Windows and macOS with Python 3.11 and 3.13, then smoke-tests the built wheel. It needs no secrets and no network beyond package installation. *CI status is not claimed here until the workflow has run on GitHub.*
+The workflow in `.github/workflows/ci.yml` runs the same checks on Ubuntu, Windows and macOS with Python 3.11 and 3.13, then smoke-tests the built wheel. It also runs the first-run launchers (`run.sh` on Ubuntu and macOS, `run.bat` and `run.ps1` on Windows). It needs no secrets and no network beyond package installation. The current status is the badge at the top.
 
 ---
 

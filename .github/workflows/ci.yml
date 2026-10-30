@@ -21,9 +21,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python: ["3.11", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
           cache: pip
@@ -59,3 +59,17 @@ jobs:
           "$BIN/weather" Yerevan --demo --output json | "$BIN/python" -c "import json,sys; assert json.load(sys.stdin)['mode'] == 'offline-synthetic-sample'"
           set +e; "$BIN/weather" London --demo; code=$?; set -e
           test "$code" -eq 3
+
+      - name: First-run launcher (macOS/Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          ./run.sh Yerevan --demo --plain
+          ./run.sh Yerevan --demo --output json > /dev/null
+
+      - name: First-run launcher (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call run.bat Yerevan --demo --plain || exit /b 1
+          powershell -ExecutionPolicy Bypass -File run.ps1 Yerevan --demo --plain || exit /b 1
