@@ -25,7 +25,9 @@ More: [offline demo](docs/screenshots/demo-forecast.svg) ·
 
 ## Quick start
 
-You need **Python 3.11 or newer**, plus internet access the first time (to install dependencies). No API key is needed.
+**Fastest on Windows (no installation):** download [`ThinkWeather.exe`](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/ThinkWeather.exe) from the release page and double-click it. The interactive menu opens. You can also run it from a terminal, e.g. `ThinkWeather.exe Yerevan --forecast`. The file is unsigned, so Windows may ask you to confirm (*More info → Run anyway*).
+
+Otherwise you need **Python 3.11 or newer**, plus internet access the first time (to install dependencies). No API key is needed.
 
 **Windows (PowerShell or CMD)**
 
