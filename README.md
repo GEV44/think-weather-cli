@@ -11,6 +11,16 @@ A Python command-line weather app. Type a city or postal code and get the curren
 More: [offline demo](docs/screenshots/demo-forecast.svg) ·
 [US ZIP in °F](docs/screenshots/live-90210-imperial.svg).</sub>
 
+**Demo videos** (on the [v1.0.0 release page](https://github.com/GEV44/think-weather-cli/releases/tag/v1.0.0)):
+
+| Video | Length | What it is |
+|---|---|---|
+| [Visual tour, EN + HY](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/think-weather-cli-visual-tour-en-hy.mp4) | 1:40 | Real program output with English headlines and Armenian subtitles (no voice) |
+| [Narrated explainer, English](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/narrated-explainer-en.mp4) | 7:19 | How it works and why it is built this way |
+| [Narrated overview, Armenian](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/narrated-overview-hy.mp4) | 1:12 | Short overview in Armenian (vertical) |
+
+<sub>The narrated videos were generated with Google NotebookLM from this project's documentation. Their illustrations are drawn, not real program output.</sub>
+
 ---
 
 ## Quick start
@@ -168,6 +178,7 @@ These results were measured locally on Windows 11 on 2026-10-30:
 | `ruff format --check`, `ruff check`, `mypy --strict` | clean |
 | `python -m build`, then the wheel installed into a clean Python 3.12 venv, run from outside the repo | demo, JSON, plain, live ZIP and uninstall all OK |
 | `uv lock` → `uv sync --locked` → `uv run weather --demo` | OK |
+| GitHub Actions (Ubuntu, macOS, Windows × Python 3.11, 3.13) | all 6 jobs green, launchers included |
 | Live calls (Open-Meteo) | Yerevan, 90210 (US), 00501 (US), `"SW1A 1AA" --country GB`, Springfield (ambiguous), Paris, Երևան, unknown city, `0010 --country AM` all behave as described above |
 
 The workflow in `.github/workflows/ci.yml` runs the same checks on Ubuntu, Windows and macOS with Python 3.11 and 3.13, then smoke-tests the built wheel. It also runs the first-run launchers (`run.sh` on Ubuntu and macOS, `run.bat` and `run.ps1` on Windows). It needs no secrets and no network beyond package installation. The current status is the badge at the top.
@@ -186,4 +197,4 @@ The workflow in `.github/workflows/ci.yml` runs the same checks on Ubuntu, Windo
 - Postal-code coverage depends on third-party indexes and is not global (see above).
 - `--plain` uses ASCII for every decoration. Place names are printed exactly as the geocoder returns them, so they may contain non-ASCII letters (e.g. "Île-de-France").
 - Emoji width varies between terminals. If icons look misaligned, use `--plain`. Without a UTF-8 terminal, the app falls back to ASCII symbols automatically.
-- The launchers were tested on Windows (`run.bat`, `run.ps1`). `run.sh` follows the same logic, but it was **not run** on macOS or Linux for this submission; CI covers the `pip install` path on those systems.
+- The launchers were tested locally on Windows (`run.bat`, `run.ps1`). GitHub Actions runs `run.sh` on Ubuntu and macOS and `run.bat`/`run.ps1` on Windows.
