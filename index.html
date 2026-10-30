@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Weather</title>
+<style>
+  :root {
+    --bg: #0a1020; --bg2: #0f1830; --card: #121d38; --line: #22305a;
+    --ink: #eef2fb; --muted: #9aa8c7; --amber: #f5a524; --sky: #38bdf8; --green: #34d399;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .hy { color: var(--muted); font-size: .92em; display: block; }
+
+  /* hero */
+  .hero { position: relative; overflow: hidden; padding: 72px 0 40px;
+    background: radial-gradient(900px 500px at 85% 10%, rgba(56,189,248,.16), transparent 60%),
+                radial-gradient(700px 400px at 10% 0%, rgba(245,165,36,.14), transparent 60%), var(--bg); }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--sky); background: rgba(56,189,248,.1); border: 1px solid rgba(56,189,248,.25);
+    padding: 6px 12px; border-radius: 999px; }
+  h1 { font-size: clamp(44px, 6vw, 72px); line-height: 1.02; margin: 18px 0 14px; letter-spacing: -1.5px; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--amber); }
+  .lead { font-size: 20px; color: #d6deef; margin: 0 0 6px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 12px; font-weight: 600;
+    text-decoration: none; transition: transform .15s ease, background .15s ease; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: var(--amber); color: #1a1205; }
+  .btn.ghost { border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+  .shot { border-radius: 14px; overflow: hidden; border: 1px solid #2a3a66;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03), 0 0 60px rgba(56,189,248,.12); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .hero .shot { transform: perspective(1400px) rotateY(-6deg) rotateX(2deg); }
+  .caption { font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center; }
+
+  section { padding: 72px 0; }
+  .alt { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  h2 { font-size: 34px; letter-spacing: -.5px; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 36px; }
+
+  /* videos */
+  .videos { display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); gap: 40px; justify-content: center; }
+  .phone { background: #05080f; border: 1px solid #2a3a66; border-radius: 34px; padding: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+  .phone video { width: 100%; aspect-ratio: 9 / 16; display: block; border-radius: 24px; background: #000; }
+  .vlabel { text-align: center; margin-top: 14px; font-weight: 700; }
+  .vlabel small { display: block; font-weight: 400; color: var(--muted); }
+  .missing { aspect-ratio: 9 / 16; border-radius: 24px; display: grid; place-items: center; text-align: center;
+    padding: 24px; color: var(--muted); background: linear-gradient(160deg, #13203f, #0a1020); }
+
+  /* features */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card .ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px;
+    background: rgba(245,165,36,.12); margin-bottom: 14px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* gallery */
+  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+
+  /* try */
+  .try { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+  pre { margin: 0; background: #060a14; border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px;
+    font: 15px/1.7 "Cascadia Code", Consolas, "SF Mono", Menlo, monospace; color: #dbe5ff; overflow-x: auto; }
+  pre .c { color: #6b7a9e; } pre .p { color: var(--amber); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .stat b { display: block; font-size: 30px; line-height: 1.1; color: var(--green); }
+  .stat span { color: var(--muted); font-size: 14px; }
+
+  .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .step.wide { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; }
+  .step.wide > b { margin: 0; flex: none; }
+  .step.wide h3, .step.wide p { margin: 0; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; min-width: 0; }
+  .step > b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--amber);
+    color: #1a1205; margin-bottom: 12px; }
+  .step h3 { margin: 0 0 8px; font-size: 18px; }
+  .step p { color: var(--muted); font-size: 15px; margin: 10px 0 0; }
+  .step pre { font-size: 13.5px; padding: 14px 16px; white-space: pre-wrap; word-break: break-word; }
+  code { font-family: "Cascadia Code", Consolas, monospace; background: #060a14; padding: 1px 6px; border-radius: 6px; }
+  @media (max-width: 960px) { .steps { grid-template-columns: 1fr; } }
+
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .hero-grid, .try, .gallery { grid-template-columns: 1fr; }
+    .features { grid-template-columns: 1fr; }
+    .videos { grid-template-columns: minmax(0, 300px); }
+    .hero .shot { transform: none; }
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">☀ Python command-line app</span>
+      <h1>Think <em>Weather</em></h1>
+      <p class="lead">Type a city or postal code. Get beautiful, live weather right in your terminal.</p>
+      <span class="hy">Գրեք քաղաքի անուն կամ փոստային կոդ և ստացեք գեղեցիկ, իրական ժամանակի եղանակը հենց տերմինալում։</span>
+      <div class="cta">
+        <a class="btn primary" href="#test">▶ Test it in 1 minute</a>
+        <a class="btn ghost" href="#videos">Watch the video</a>
+        <a class="btn ghost" href="https://github.com/GEV44/think-weather-cli">GitHub →</a>
+      </div>
+    </div>
+    <div>
+      <div class="shot"><img src="assets/live-yerevan.png" alt="Live weather dashboard for Yerevan in the terminal"></div>
+      <div class="caption">Real output: live weather for Yerevan, with an hourly chart and a 5-day forecast</div>
+    </div>
+  </div>
+</header>
+
+<section id="test" class="alt">
+  <div class="wrap">
+    <h2>Test it in 1 minute</h2>
+    <p class="sub">It is a command-line app: it runs in a terminal (PowerShell, Command Prompt or macOS/Linux Terminal), not in a browser. The pictures on this page are real captures of it running.
+      <span class="hy">Սա հրամանային տողի ծրագիր է. այն աշխատում է տերմինալում (PowerShell, Terminal), ոչ թե բրաուզերում։ Էջի նկարները ծրագրի իրական աշխատանքի պատկերներ են։</span></p>
+    <div class="steps">
+      <div class="step wide"><b>⚡</b><div><h3>Quickest on Windows: no installation</h3><p>Download <a href="https://github.com/GEV44/think-weather-cli/releases/latest/download/ThinkWeather.exe"><b>ThinkWeather.exe</b></a> and double-click it. The interactive menu opens: type a city and press Enter. (If Windows shows “protected your PC”, click <i>More info → Run anyway</i>; the file is unsigned.)</p></div></div>
+      <div class="step wide"><b>1</b><div><h3>Or run it the Python way: you need Python 3.11+ and Git</h3><p>Check with <code>python --version</code>. No account or API key needed.</p></div></div>
+      <div class="step"><b>2</b><h3>Download and run</h3>
+<pre><span class="p">&gt;</span> git clone https://github.com/GEV44/think-weather-cli.git
+<span class="p">&gt;</span> cd think-weather-cli
+<span class="c"># Windows</span>
+<span class="p">&gt;</span> run.bat Yerevan --forecast
+<span class="c"># macOS / Linux</span>
+<span class="p">$</span> ./run.sh Yerevan --forecast</pre>
+        <p>The first run sets everything up (about a minute). After that it's instant.</p></div>
+      <div class="step"><b>3</b><h3>Play with it</h3>
+<pre><span class="c"># interactive menu</span>
+<span class="p">&gt;</span> run.bat
+<span class="c"># other places, °F, ambiguous names</span>
+<span class="p">&gt;</span> run.bat Paris
+<span class="p">&gt;</span> run.bat 90210 --country US --units imperial
+<span class="p">&gt;</span> run.bat Springfield --country US</pre>
+        <p>On macOS/Linux use <code>./run.sh</code> instead of <code>run.bat</code>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="wrap">
+    <h2>See it in one minute</h2>
+    <p class="sub">A short showcase in English and in Armenian.<span class="hy">Կարճ ներկայացում անգլերեն և հայերեն։</span></p>
+    <div class="videos">
+      <div>
+        <div class="phone" id="en-box"><video controls preload="metadata" poster="assets/showcase-en.jpg" src="assets/showcase-en.mp4"
+          ></video></div>
+        <div class="vlabel">English<small>1 min</small></div>
+      </div>
+      <div>
+        <div class="phone"><video controls preload="metadata" poster="assets/showcase-hy.jpg" src="assets/showcase-hy.mp4"></video></div>
+        <div class="vlabel">Հայերեն<small>1 min</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>What it does</h2>
+    <p class="sub">Everything the assignment asked for, plus every bonus.<span class="hy">Առաջադրանքի բոլոր պահանջները և բոլոր բոնուսները։</span></p>
+    <div class="features">
+      <div class="card"><div class="ico">📍</div><h3>Any city or ZIP code</h3><p>Yerevan, “New York”, Երևան, 90210 or 00501. When a name is ambiguous, it asks instead of guessing.</p></div>
+      <div class="card"><div class="ico">🌤</div><h3>A beautiful dashboard</h3><p>Weather pictures, colours, and an hourly chart that fits your terminal width.</p></div>
+      <div class="card"><div class="ico">📅</div><h3>Next hours + 5 days</h3><p>Hour by hour for up to 48 hours, plus a 5-day forecast with daily highs and lows.</p></div>
+      <div class="card"><div class="ico">🌡</div><h3>°C ⇄ °F in one key</h3><p>Switch between Celsius and Fahrenheit instantly, without reloading.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>Fast and saves requests</h3><p>Results are remembered for 10 minutes, so repeat lookups are instant.</p></div>
+      <div class="card"><div class="ico">🛡</div><h3>Never crashes</h3><p>Clear, friendly messages for typos or a lost connection, and an offline demo mode.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Real screenshots</h2>
+    <p class="sub">Captured from the running program, not mock-ups.<span class="hy">Իրական ծրագրի պատկերներ, ոչ թե մակետներ։</span></p>
+    <div class="gallery">
+      <div><div class="shot"><img src="assets/live-90210-imperial.png" alt="Beverly Hills 90210 in Fahrenheit"></div>
+        <div class="caption">US ZIP 90210 in Fahrenheit, next 12 hours</div></div>
+      <div><div class="shot"><img src="assets/demo-forecast.png" alt="Offline demo forecast"></div>
+        <div class="caption">Offline demo mode, clearly marked as sample data</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap try">
+    <div>
+      <h2>Try it yourself</h2>
+      <p class="sub" style="margin-bottom:20px">One command. Python 3.11+, no account or API key.<span class="hy">Մեկ հրաման. անհրաժեշտ է միայն Python 3.11+։</span></p>
+<pre><span class="c"># download</span>
+<span class="p">$</span> git clone https://github.com/GEV44/think-weather-cli.git
+<span class="p">$</span> cd think-weather-cli
+
+<span class="c"># Windows</span>
+<span class="p">&gt;</span> run.bat Yerevan --forecast
+<span class="c"># macOS / Linux</span>
+<span class="p">$</span> ./run.sh Yerevan --forecast</pre>
+    </div>
+    <div>
+      <div class="stats">
+        <div class="stat"><b>340</b><span>automated tests</span></div>
+        <div class="stat"><b>95.8%</b><span>code covered by tests</span></div>
+        <div class="stat"><b>3 / 3</b><span>Windows, macOS, Linux checked</span></div>
+      </div>
+      <p class="sub" style="margin:18px 0 0">Every change is tested automatically on GitHub before it ships.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span><b style="color:var(--ink)">Gevorg Hovhannisyan</b> · Python assignment · October 2026</span>
+    <span>Weather data © Open-Meteo.com (CC BY 4.0) · Geocoding: GeoNames</span>
+  </div>
+</footer>
+
+</body>
+</html>
