@@ -15,11 +15,11 @@ More: [offline demo](docs/screenshots/demo-forecast.svg) ·
 
 | Video | Length | What it is |
 |---|---|---|
-| [Visual tour, EN + HY](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/think-weather-cli-visual-tour-en-hy.mp4) | 1:40 | Real program output with English headlines and Armenian subtitles (no voice) |
-| [Narrated explainer, English](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/narrated-explainer-en.mp4) | 7:19 | How it works and why it is built this way |
-| [Narrated overview, Armenian](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/narrated-overview-hy.mp4) | 1:12 | Short overview in Armenian (vertical) |
+| [Showcase, English](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/showcase-en.mp4) | 1:02 | What the app does, narrated (vertical) |
+| [Showcase, Armenian](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/showcase-hy.mp4) | 1:20 | The same, narrated in Armenian (vertical) |
+| [Tour of the real app](https://github.com/GEV44/think-weather-cli/releases/download/v1.0.0/think-weather-cli-visual-tour-en-hy.mp4) | 1:40 | Real program output, English headlines with Armenian subtitles (no voice) |
 
-<sub>The narrated videos were generated with Google NotebookLM from this project's documentation. Their illustrations are drawn, not real program output.</sub>
+<sub>The narrated showcases were generated with Google NotebookLM from this project's documentation. Their illustrations are artistic, not real program output; the tour shows the real output.</sub>
 
 ---
 
