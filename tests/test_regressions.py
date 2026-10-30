@@ -10,7 +10,7 @@ import pytest
 from rich.console import Console
 
 from conftest import SPRINGFIELDS, ZIP_HOST, FakeApi, forecast_payload, geo_result
-from weather_cli.cli import main
+from weather_cli.cli import _prepare_stream, main
 from weather_cli.errors import ExitCode
 from weather_cli.interactive import InteractiveSession
 from weather_cli.locations import parse_query
@@ -144,3 +144,35 @@ def test_postal_outage_keeps_geocoder_closest_match(api: FakeApi) -> None:
     resolution = service.resolve(parse_query("90210", "US"))
     assert resolution.location is not None and resolution.location.name == "Elsewhere"
     assert resolution.note is not None and "Closest match" in resolution.note
+
+
+class _TtyWrapper(io.TextIOWrapper):
+    def isatty(self) -> bool:
+        return True
+
+
+def test_redirected_legacy_code_page_output_keeps_place_names() -> None:
+    # Windows redirects stdout with the legacy code page; "Երևան" used to become "?????".
+    raw = io.BytesIO()
+    stream = io.TextIOWrapper(raw, encoding="cp1251")
+    _prepare_stream(stream)
+    stream.write("Երևան, Île-de-France")
+    stream.flush()
+    assert raw.getvalue().decode("utf-8") == "Երևան, Île-de-France"
+
+
+def test_terminal_keeps_its_encoding_and_never_crashes_on_a_missing_glyph() -> None:
+    raw = io.BytesIO()
+    stream = _TtyWrapper(raw, encoding="cp1251")
+    _prepare_stream(stream)
+    stream.write("Երևան")
+    stream.flush()
+    assert stream.encoding == "cp1251"
+    assert raw.getvalue() == b"?????"
+
+
+def test_streams_without_reconfigure_are_left_alone() -> None:
+    stream = io.StringIO()
+    _prepare_stream(stream)
+    stream.write("Երևան")
+    assert stream.getvalue() == "Երևան"

@@ -161,7 +161,7 @@ These results were measured locally on Windows 11 on 2026-10-30:
 
 | Check | Result |
 |---|---|
-| `pytest` on Python 3.11.9 and on Python 3.14.4 | 337 passed (each) |
+| `pytest` on Python 3.11.9 and on Python 3.14.4 | 340 passed (each) |
 | Coverage (branch) | 95.8 % (the CI gate is 90 %) |
 | `ruff format --check`, `ruff check`, `mypy --strict` | clean |
 | `python -m build`, then the wheel installed into a clean Python 3.12 venv, run from outside the repo | demo, JSON, plain, live ZIP and uninstall all OK |

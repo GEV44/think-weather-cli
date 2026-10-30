@@ -147,6 +147,22 @@ def _configure_logging(verbose: bool, stream: TextIO) -> None:
     log.propagate = False
 
 
+def _prepare_stream(stream: TextIO) -> None:
+    """Never crash on a missing glyph; write UTF-8 when redirected to a file or pipe.
+
+    On Windows a redirected stream uses the legacy code page (e.g. cp1251), which
+    would turn place names such as "Երևան" or "Île-de-France" into "?".
+    """
+    reconfigure = getattr(stream, "reconfigure", None)
+    if not callable(reconfigure):
+        return
+    encoding = (getattr(stream, "encoding", None) or "").lower().replace("-", "")
+    if not stream.isatty() and encoding != "utf8":
+        reconfigure(encoding="utf-8", errors="replace")
+    else:
+        reconfigure(errors="replace")
+
+
 def _supports_unicode(console: Console) -> bool:
     return console.encoding.lower().replace("-", "").startswith("utf")
 
@@ -327,9 +343,7 @@ def main(
     out = stdout or sys.stdout
     err = stderr or sys.stderr
     for stream in (out, err):
-        reconfigure = getattr(stream, "reconfigure", None)
-        if callable(reconfigure):
-            reconfigure(errors="replace")  # never crash on a terminal that lacks a glyph
+        _prepare_stream(stream)
 
     args: argparse.Namespace | None = None
     try:

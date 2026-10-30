@@ -89,7 +89,7 @@ Open-Meteo's geocoder accepts both place names and postal codes, but coverage is
 
 ## 8. Quality evidence
 
-- 337 offline tests. A socket guard makes any accidental real network access fail the test.
+- 340 offline tests. A socket guard makes any accidental real network access fail the test.
 - Branch coverage is about 95 %, with a gate at 90 %.
 - `ruff` (including security `S` rules), `mypy --strict`.
 - Warnings are errors in tests. This is how unclosed SQLite handles in the tests were caught on Python 3.14.
