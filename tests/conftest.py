@@ -5,7 +5,7 @@ from __future__ import annotations
 import socket
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, tzinfo
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -52,6 +52,31 @@ def isolated_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     monkeypatch.delenv("NO_COLOR", raising=False)
     monkeypatch.setenv("COLUMNS", "100")
     return cache_dir
+
+
+# The moment the default fixture payloads describe (13:15 in Yerevan on 2026-10-30).
+FROZEN_NOW = datetime(2026, 10, 30, 9, 15, tzinfo=UTC)
+
+
+class _FrozenDatetime(datetime):
+    @classmethod
+    def now(cls, tz: tzinfo | None = None) -> datetime:  # type: ignore[override]
+        return FROZEN_NOW if tz is None else FROZEN_NOW.astimezone(tz)
+
+
+@pytest.fixture(autouse=True)
+def frozen_wall_clock(monkeypatch: pytest.MonkeyPatch) -> datetime:
+    """Pin the app's wall clock to the fixture data's date.
+
+    Without this, tests that go through the default clock (the CLI and interactive
+    session) would start failing once the real date moves past the sample forecast.
+    """
+    import weather_cli.cli as cli_module
+    import weather_cli.service as service_module
+
+    monkeypatch.setattr(service_module, "datetime", _FrozenDatetime)
+    monkeypatch.setattr(cli_module, "datetime", _FrozenDatetime)
+    return FROZEN_NOW
 
 
 # --------------------------------------------------------------------------- payloads
