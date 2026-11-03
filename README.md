@@ -1,6 +1,6 @@
 # Think Weather CLI
 
-[![CI](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml)
+[![CI](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/GEV44/think-weather-cli/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Python command-line weather app. Type a city or postal code and get the current conditions, an hourly chart and a 5-day forecast in Celsius or Fahrenheit. It works as a polished dashboard, as plain text or as JSON. Live data comes from the keyless [Open-Meteo](https://open-meteo.com/) API.
 
@@ -189,6 +189,7 @@ The workflow in `.github/workflows/ci.yml` runs the same checks on Ubuntu, Windo
 
 ## Data sources, licence and limitations
 
+- **This project's code** is released under the [MIT License](LICENSE). The data sources below have their own terms.
 - **Weather data © [Open-Meteo.com](https://open-meteo.com/)**, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). **Geocoding** is based on [GeoNames](https://www.geonames.org/) (CC BY 4.0), served by Open-Meteo. The app prints this attribution with every report.
 - **Licence terms for the free API.** Open-Meteo's free hosted API is for **non-commercial use only**, with fair-use limits ([terms](https://open-meteo.com/en/terms)). This project is a demonstration/evaluation tool. Commercial use requires a paid [Open-Meteo plan](https://open-meteo.com/en/pricing) or a self-hosted instance. Only the provider adapter would need to change.
 - The optional postal fallback uses [Zippopotam.us](https://zippopotam.us/) and is attempted only for countries it lists. It was verified live for US ZIP codes. Zippopotam.us indexes only districts for GB, CA and NL (checked 2026-10-30). Full postcodes fall back to the district with a visible note: the weather is for the district area, not the exact street.
